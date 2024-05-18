@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using Tournament.Data.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -9,6 +12,10 @@ builder.Services.AddControllers(opt => opt.ReturnHttpNotAcceptable = true)
     .AddNewtonsoftJson()
     .AddXmlDataContractSerializerFormatters();
 
+builder.Services.AddDbContext<TournamentContext>(opt =>
+    opt.UseSqlite(builder.Configuration.GetConnectionString("TournamentConnection"))
+    .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -17,7 +24,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+else
+    app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
+
+app.MapControllers();
 
 app.Run();
