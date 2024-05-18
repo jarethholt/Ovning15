@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Tournament.Api.Extensions;
 using Tournament.Data.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +18,8 @@ builder.Services.AddDbContext<TournamentContext>(opt =>
     .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
 
 var app = builder.Build();
+
+await app.SeedDataAsync();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
