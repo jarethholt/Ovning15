@@ -30,4 +30,12 @@ public class TournamentsController : ControllerBase
             return NotFound();
         return Ok(tournament);
     }
+
+    [HttpPost]
+    public async Task<ActionResult<Core.Entities.Tournament>> CreateTournament(Core.Entities.Tournament tournament)
+    {
+        _context.Add(tournament);
+        await _context.SaveChangesAsync();
+        return CreatedAtAction(nameof(GetTournamentByIdAsync), new { id = tournament.Id }, tournament);
+    }
 }
